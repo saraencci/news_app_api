@@ -35,9 +35,16 @@ class database
 			//$article_url="test";
 			//$article_url_to_image="test";
 			$article_content="test";
-			$query= $this->pdo->prepare("INSERT INTO `articles_table`VALUES ('$article_title','$article_author','$article_description','$article_url','$article_url_to_image','$article_content')");
-			//$query= $this->pdo->prepare("INSERT INTO `articles_table`VALUES ($article_title,$article_author,$article_description,$article_url,$article_url_to_image,$article_content)");
-				$query->execute();
+			//$query= $this->pdo->prepare("INSERT INTO `articles_table`VALUES ('$article_title','$article_author','$article_description','$article_url','$article_url_to_image','$article_content')");
+			$query= $this->pdo->prepare("INSERT INTO `articles_table`VALUES (:article_title,:article_author,:article_description,
+			:article_url,:article_url_to_image,:article_content)");
+			$query->bindParam(':article_title', $article_title);
+			$query->bindParam(':article_author', $article_author);
+			$query->bindParam(':article_description', $article_description);
+			$query->bindParam(':article_url', $article_url);
+			$query->bindParam(':article_url_to_image', $article_url_to_image);
+			$query->bindParam(':article_content', $article_content);	
+			$query->execute();
 				//$pid= $this->pdo->lastInsertId();			
 				$rowsadded = $query->rowCount();
 				if ($rowsadded >0 )
