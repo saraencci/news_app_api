@@ -12,7 +12,7 @@ class database
 		function check_if_article_exists_in_tabe($article_url)
 		{
 
-			$query=$this->pdo->prepare("select * from articles where url='$article_url'");
+			$query=$this->pdo->prepare("select * from articles_table where url='$article_url'");
 			$query->execute();
 			$count =$query->rowCount();
 			if ($count == 1)
@@ -29,13 +29,7 @@ class database
 
 		function add_articles_to_database($article_title,$article_author,$article_description,$article_url,$article_url_to_image,$article_content)
 		{
-			//$article_title="test";
-			//$article_author="test";
-			$article_description= "test";
-			//$article_url="test";
-			//$article_url_to_image="test";
-			$article_content="test";
-			//$query= $this->pdo->prepare("INSERT INTO `articles_table`VALUES ('$article_title','$article_author','$article_description','$article_url','$article_url_to_image','$article_content')");
+			
 			$query= $this->pdo->prepare("INSERT INTO `articles_table`VALUES (:article_title,:article_author,:article_description,
 			:article_url,:article_url_to_image,:article_content)");
 			$query->bindParam(':article_title', $article_title);
@@ -44,12 +38,11 @@ class database
 			$query->bindParam(':article_url', $article_url);
 			$query->bindParam(':article_url_to_image', $article_url_to_image);
 			$query->bindParam(':article_content', $article_content);	
-			$query->execute();
-				//$pid= $this->pdo->lastInsertId();			
+			$query->execute();				
 				$rowsadded = $query->rowCount();
 				if ($rowsadded >0 )
 				{	
-					//$ctr++;							
+												
 				}
 		}
 
@@ -62,7 +55,7 @@ class database
 			$count =$query->rowCount();
 			if ($count >0)
 			{	
-								// data is available ..........add it to  json
+				// data is available ..........add it to  json
 				foreach ($article_list as $article)			
 					{
 				 		$innerapp->destination = $bus->destination;
@@ -78,6 +71,26 @@ class database
 		{
 			echo 'this is test data';	
 
+		}
+
+
+		function isSiteAvailible($url){
+			// Check, if a valid url is provided
+			if(!filter_var($url, FILTER_VALIDATE_URL)){
+				return false;
+			}		
+			// Initialize cURL
+			$curlInit = curl_init($url);			
+			// Set options
+			curl_setopt($curlInit,CURLOPT_CONNECTTIMEOUT,10);
+			curl_setopt($curlInit,CURLOPT_HEADER,true);
+			curl_setopt($curlInit,CURLOPT_NOBODY,true);
+			curl_setopt($curlInit,CURLOPT_RETURNTRANSFER,true);		
+			// Get response
+			$response = curl_exec($curlInit);			
+			// Close a cURL session
+			curl_close($curlInit);		
+			return $response?true:false;
 		}
 
 	}					
