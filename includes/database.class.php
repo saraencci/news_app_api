@@ -1,6 +1,5 @@
 <?php
-ob_start();
-//session_start();
+//ob_start();
 class database
 	{
 		private $func;
@@ -9,24 +8,7 @@ class database
 		{
 			$this->pdo=$pdo; 
 		}
-		function check_if_article_exists_in_tabe($article_url)
-		{
-
-			$query=$this->pdo->prepare("select * from articles_table where url='$article_url'");
-			$query->execute();
-			$count =$query->rowCount();
-			if ($count == 1)
-			{	
-				//article exists in database
-				return 1;
-			}
-			else{
-				//article doesnt exist in database
-				return 0;
-			}
-
-		}
-
+		
 		function add_articles_to_database($article_title,$article_author,$article_description,$article_url,$article_url_to_image,$article_content)
 		{
 			
@@ -46,25 +28,26 @@ class database
 				}
 		}
 
-		function read_articles($article_url)
+		function read_articles()
 		{
-			
-			$query=$this->pdo->prepare("select * from articles where url='$article_url'");
+			$return_arr=array();
+			$query=$this->pdo->prepare("select * from articles_table WHERE 1");
 			$query->execute();
-			$article_list = $query->fetchAll();
-			$count =$query->rowCount();
-			if ($count >0)
-			{	
-				// data is available ..........add it to  json
-				foreach ($article_list as $article)			
-					{
-				 		$innerapp->destination = $bus->destination;
-						$innerapp->duration = $bus->duration;						
-				        array_push($return_arr,$innerapp);							
-					}
-				$jsonData = json_encode($return_arr);
-		    	echo $jsonData;				
+			while($article=$query->fetch(PDO::FETCH_OBJ)){
+				$temp_holder= new \stdClass();
+				$temp_holder->title=$article->TITLE;
+				$temp_holder->author=$article->AUTHOR;
+				$temp_holder->description=$article->DESCRIPTION;
+				$temp_holder->url=$article->URL;
+				$temp_holder->img_url=$article->URL_TO_IMAGE;
+				//$temp_holder->content=$article->CONTENT;						
+				array_push($return_arr,$temp_holder);	
+
 			}
+			$jsonData = json_encode($return_arr);
+			echo $jsonData;	
+			
+						
 		}
 
 		function clietBookingMobile()
