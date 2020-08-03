@@ -40,7 +40,9 @@ class database
 				$temp_holder->description=$article->DESCRIPTION;
 				$temp_holder->url=$article->URL;
 				$temp_holder->img_url=$article->URL_TO_IMAGE;
-				//$temp_holder->content=$article->CONTENT;						
+				$content_holder=$article->CONTENT;
+				$replaced_str=str_replace('"',"&quote",$content_holder);
+				$temp_holder->content=	$replaced_str	;				
 				array_push($return_arr,$temp_holder);	
 
 			}
@@ -74,6 +76,14 @@ class database
 			// Close a cURL session
 			curl_close($curlInit);		
 			return $response?true:false;
+		}
+
+
+		function endswith($string, $test) {
+			$strlen = strlen($string);
+			$testlen = strlen($test);
+			if ($testlen > $strlen) return false;
+			return substr_compare($string, $test, $strlen - $testlen, $testlen) === 0;
 		}
 
 	}					

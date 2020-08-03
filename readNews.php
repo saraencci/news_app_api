@@ -11,16 +11,28 @@ foreach($private_url as $url)
 $json = json_decode($json);
 
 foreach ($json->articles as $article) {
+  $str="";
   if($db->isSiteAvailible($article->url)){
     try{
-    $html = file_get_html($article->url);
-      }
-      catch(Exception $r){
+      if($db->endswith($article->url,'html') |$db->endswith($article->url, '/')){
+        $html = file_get_html($article->url);
+        
+        foreach($html->find('p') as $element){
+          $element=str_replace('"',"&&quote&&",$element);
+          $element=str_replace('<iframe',"&&frame",$element);
+          $element=str_replace('</iframe',"&&frame&&",$element);
+          $str=$str.$element;
 
       }
-    $str="";
-    foreach($html->find('p') as $element)
-         $str=$str.$element;
+    }       
+          
+      }
+      catch(Exception $r){
+        $html=" ";
+
+      }
+   
+    }        
 
          if($str!=""){
          try{
@@ -35,7 +47,7 @@ foreach ($json->articles as $article) {
     echo "---------------------------------------------------------------------------------------<br>";
     }
    }
-  }
+  
 
 
 ?>
