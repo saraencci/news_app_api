@@ -11,6 +11,9 @@ foreach($private_url as $url)
 $json = json_decode($json);
 
 foreach ($json->articles as $article) {
+  $id=$article->source->id;
+  $name=$article->source->name;
+
   $str="";
   if($db->isSiteAvailible($article->url)){
     try{
@@ -37,7 +40,8 @@ foreach ($json->articles as $article) {
          if($str!=""){
          try{
           $db->add_articles_to_database($article->title ,$article->author ,$article->description 
-          ,$article->url,$article->urlToImage,$str);
+          ,$article->url,$article->urlToImage,$str,$id,$name);
+      
 
          }
         catch(PDOException $e){
