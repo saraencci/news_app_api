@@ -24,6 +24,12 @@ foreach ($json->articles as $article) {
           $element=str_replace('"',"&&quote&&",$element);
           $element=str_replace('<iframe',"&&frame",$element);
           $element=str_replace('</iframe',"&&frame&&",$element);
+
+          $element=str_replace('<span',"&span",$element);
+          $element=str_replace('</span',"&&span",$element);
+
+          $element=str_replace('<button',"&button",$element);
+          $element=str_replace('</button',"&&button",$element);
           $str=$str.$element;
 
       }

@@ -49,7 +49,7 @@ class database
 				$temp_holder->author=$article->AUTHOR;
 				$temp_holder->description=$article->DESCRIPTION;
 				$temp_holder->url=$article->URL;
-				$temp_holder->img_url=$article->URL_TO_IMAGE;
+				$temp_holder->urlToImage=$article->URL_TO_IMAGE;
 				$content_holder=$article->CONTENT;
 				$replaced_str=str_replace('"',"&quote",$content_holder);
 				$temp_holder->content=	$replaced_str	;				
