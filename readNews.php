@@ -21,13 +21,14 @@ foreach ($json->articles as $article) {
         $html = file_get_html($article->url);
         
         foreach($html->find('p') as $element){
+          //replace quotes
           $element=str_replace('"',"&&quote&&",$element);
           $element=str_replace('<iframe',"&&frame",$element);
           $element=str_replace('</iframe',"&&frame&&",$element);
-
+          //remove spans 
           $element=str_replace('<span',"&span",$element);
           $element=str_replace('</span',"&&span",$element);
-
+          // remove buttons
           $element=str_replace('<button',"&button",$element);
           $element=str_replace('</button',"&&button",$element);
           $str=$str.$element;
